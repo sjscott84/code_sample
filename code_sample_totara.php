@@ -20,6 +20,16 @@
         return $tidyString."\n";
       }
 
+      function createString($string, $newString, $split, $length, $growLength, $addLength){
+        $nextString = tidyString(substr($string, $split, $length));
+        $newString = $newString.$nextString;
+        error_log($newString);
+        echo $newString."<br>";
+        $split = $split + $addLength;
+        $newLength = $growLength + $addLength;
+        return array($newString, $split, $newLength);
+      }
+
       function wrap ($string, $length) {
         $newString = "";
         $growLength = $length - 1;
@@ -28,41 +38,28 @@
           if (strlen($string) <= $length) {
             return $string;
           } elseif ($string[$growLength + 1] === " ") {
-            $nextString = tidyString(substr($string, $startSplit, $length));
-            $newString = $newString.$nextString;
-            error_log($newString);
-            echo $newString."<br>";
-            $startSplit = $startSplit + $length + 1;
-            $growLength = $growLength + $length + 1;
+            list($newString, $startSplit, $growLength) = createString($string, $newString,
+              $startSplit, $length, $growLength, $length + 1);
           } elseif ($string[$growLength] === " ") {
-            $nextString = tidyString(substr($string, $startSplit, $length));
-            $newString = $newString.$nextString;
-            echo $newString."<br>";
-            error_log($newString);
-            $startSplit = $startSplit + $length - 1;
-            $growLength = $growLength + $length - 1;
+            list($newString, $startSplit, $growLength) = createString($string, $newString,
+              $startSplit, $length, $growLength, $length - 1);
           } else {
             for ($count = 1; $count <= $length; $count++) {
               if ($count === $length) {
-                $nextString = tidyString(substr($string, $startSplit, $length));
-                $newString = $newString.$nextString;
-                $startSplit = $startSplit + $length;
-                $growLength = $growLength + $length;
+                list($newString, $startSplit, $growLength) = createString($string, $newString,
+                  $startSplit, $length, $growLength, $length);
               } elseif ($string[$growLength - $count] === " ") {
-                $nextString = tidyString(substr($string, $startSplit, $length - $count));
-                $newString = $newString.$nextString;
-                $startSplit = $startSplit + $length - $count;
-                $growLength = $growLength + $length - $count;
+                list($newString, $startSplit, $growLength) = createString($string, $newString,
+                  $startSplit, $length, $growLength, $length - $count);
                 break;
               }
             }
-            echo $newString."<br>";
             error_log($newString);
           }
         }
         return $newString;
       }
-      wrap("This is a string that I am testing.", 3);
+      wrap("This is a string that I am testing.", 7);
     ?>
     </body>
 </html>
