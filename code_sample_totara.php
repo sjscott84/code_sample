@@ -49,8 +49,9 @@
                 list($newString, $startSplit, $growLength) = createString($string, $newString,
                   $startSplit, $length, $growLength, $length);
               } elseif ($string[$growLength - $count] === " ") {
+                $tempLength = $length - $count;
                 list($newString, $startSplit, $growLength) = createString($string, $newString,
-                  $startSplit, $length, $growLength, $length - $count);
+                  $startSplit, $tempLength, $growLength, $tempLength);
                 break;
               }
             }
@@ -59,7 +60,7 @@
         }
         return $newString;
       }
-      wrap("This is a string that I am testing.", 7);
+      wrap("This is a string that I am testing.", 3);
     ?>
     </body>
 </html>
