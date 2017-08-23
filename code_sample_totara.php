@@ -34,15 +34,19 @@
         $newString = "";
         $growLength = $length - 1;
         $startSplit = 0;
-        while ( strlen($string) + $length >= strlen($newString) ){
+        while ( strlen($string) >= strlen($newString) ){
+          //If string less then length simply return string
           if (strlen($string) <= $length) {
             return $string;
-          } elseif ($string[$growLength + 1] === " ") {
+          //If character next to one that is to be split is space, split there
+          } elseif ($string[$growLength + 1] === " " && $growLength + $length < strlen($string)) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length + 1);
+          //If character to be split is a space, split there
           } elseif ($string[$growLength] === " ") {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length - 1);
+          //Find the nearest space and split there
           } else {
             for ($count = 1; $count <= $length; $count++) {
               if ($count === $length) {
@@ -55,7 +59,6 @@
                 break;
               }
             }
-            error_log($newString);
           }
         }
         return $newString;
