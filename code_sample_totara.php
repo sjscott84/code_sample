@@ -23,7 +23,7 @@
       function createString($string, $newString, $split, $length, $growLength, $addLength){
         $nextString = tidyString(substr($string, $split, $length));
         $newString = $newString.$nextString;
-        error_log($newString);
+        //error_log($newString);
         echo $newString."<br>";
         $split = $split + $addLength;
         $newLength = $growLength + $addLength;
@@ -34,12 +34,13 @@
         $newString = "";
         $growLength = $length - 1;
         $startSplit = 0;
-        while ( strlen($string) >= strlen($newString) ){
+        $complete = False;
+        while ( !$complete ){
           //If string less then length simply return string
           if (strlen($string) <= $length) {
             return $string;
           //If character next to one that is to be split is space, split there
-          } elseif ($string[$growLength + 1] === " " && $growLength + $length < strlen($string)) {
+          } elseif ($string[$growLength + 1] === " ") {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length + 1);
           //If character to be split is a space, split there
@@ -60,10 +61,14 @@
               }
             }
           }
+          if ($growLength - $length >= strlen($string)){
+            $complete = True;
+          }
         }
         return $newString;
       }
-      wrap("This is a string that I am testing.", 3);
+      $test = wrap("This is a string that I am testing.", 7);
+      error_log($test);
     ?>
     </body>
 </html>
