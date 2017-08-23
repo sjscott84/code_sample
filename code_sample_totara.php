@@ -4,19 +4,33 @@
     <title>Totara Code Sample</title>
   </head>
   <body>
+    <form action="code_sample_totara.php" method="post">
+      Enter a string:<br>
+      <input type="text" name="string"><br>
+      Enter a number:<br>
+      <input type="text" name="number"><br><br>
+      <input type="submit">
+    </form>
     <?php
 
+      //If form is posted, run wrap function
+      if (isset($_POST['string']) && isset($_POST['number'])) {
+        wrap($_POST['string'], intval($_POST['number']));
+      }
+
+
       //Helper function to log messages to chrome console
-      function debug_to_console( $data ) {
+      function debug_to_console($data) {
         $output = $data;
-        if ( is_array( $output ) ) {
+        if (is_array($output)) {
           $output = implode( ',', $output);
         }
         echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
       }
 
-      //take section - remove white space at front and back
-      function tidyString($string){
+
+      //Take section - remove white space at front and back
+      function tidyString($string) {
         $tidyString = trim($string);
         if (strlen($tidyString) > 0) {
           return $tidyString."\n";
@@ -25,8 +39,9 @@
         }
       }
 
+
       //Create the new string and update variables needed to keep track of location
-      function createString($string, $newString, $split, $length, $growLength, $addLength){
+      function createString($string, $newString, $split, $length, $growLength, $addLength) {
         $nextChar = substr($string, $length, 1);
         $nextString = tidyString(substr($string, $split, $length));
         $newString = $newString.$nextString;
@@ -36,18 +51,19 @@
         return array($newString, $split, $newLength);
       }
 
+
       function wrap ($string, $length) {
         $newString = "";
         $growLength = $length - 1;
         $startSplit = 0;
         $complete = False;
-        while ( !$complete ){
+        while (!$complete) {
           //If string less then length simply return string
           if (strlen($string) <= $length) {
             return $string;
-          //This check ensures there are no PHP Notice:  Uninitialized string offset warnings
-          //by simply adding the last characters in $string to $newString
-          } elseif ($growLength > strlen($string)) {
+          //This check ensures there are no PHP Notice:  Uninitialized string offset 
+          //warnings by simply adding the last characters in $string to $newString
+          } elseif ($growLength >= strlen($string)) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length);
           //If character next to one that is to be split is space, split there
@@ -72,8 +88,8 @@
               }
             }
           }
-          //Exit while loop once $growLength is greater the $string - also check if last character in
-          //$newString is "\n" and remove if it is.
+          //Exit while loop once $growLength is greater the $string - also check if last 
+          //character in $newString is "\n" and remove if it is.
           if ($growLength - $length >= strlen($string)) {
             $complete = True;
             if($newString[strlen($newString) - 1] === PHP_EOL) {
@@ -86,17 +102,17 @@
 
       //Tests to ensure string is being created correctly
 
-      $test = wrap("This is a string that I am testing.", 7);
+      /*$test = wrap("This is a string that I am testing.", 7);
       error_log($test);
-      if($test === "This is\na\nstring\nthat I\nam\ntesting\n."){
+      if ($test === "This is\na\nstring\nthat I\nam\ntesting\n.") {
         error_log("True");
       } else {
         error_log("False");
-      }
+      }*/
 
       /*$test = wrap("This is a string that I am testing.", 3);
       error_log($test);
-      if($test === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng."){
+      if ($test === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
         error_log("True");
       } else {
         error_log("False");
@@ -104,20 +120,12 @@
 
       /*$test = wrap("This is a string that I am testing.", 15);
       error_log($test);
-      if($test === "This is a\nstring that I\nam testing."){
+      if ($test === "This is a\nstring that I\nam testing.") {
         error_log("True");
       } else {
         error_log("False");
       }*/
-      
+
     ?>
     </body>
 </html>
-
-<!--
-	The task is to write a function called 'wrap' that takes two arguments, $string and $length.
-The function should return the string, but with new lines ("\n") added to ensure that no line is longer than $length characters. 
-Always wrap at word boundaries if possible, only break a word if it is longer than $length characters. 
-When breaking at word boundaries, replace all the whitespace between the two words with a single newline character. 
-Any unbroken whitespace should be left unchanged.
-Please implement the function directly in PHP, rather than using the built-in wordwrap() function. -->
