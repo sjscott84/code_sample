@@ -26,7 +26,7 @@
       function wrap($string, $length, $newString) {
         $newString = $newString;
         $subString = substr($string, 0, $length);
-        //$nextCharAfterSub = substr($string, $length, 1);
+        $nextCharAfterSub = substr($string, $length, 1);
         if($newString >= strlen($string)){
           error_log("In func: ".$newString);
           if($newString[strlen($newString) - 1] === PHP_EOL) {
@@ -36,7 +36,7 @@
         } else {
           //If next char in next set is space
           //just concat $substring to $newString with \n
-          if($subString[strlen($subString)] === " "){
+          if($subString[strlen($subString)] === " " || $nextCharAfterSub == " "){
             $subString = createString($subString);
             $newString = $newString.$subString;
             echo $newString."<br>";
