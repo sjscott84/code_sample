@@ -14,45 +14,73 @@
         echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
       }
 
-      function newString($string, $length, $newString) {
+      function createString($string){
+        $string = trim($string);
+        if (strlen($string) > 0) {
+          return $string."\n";
+        } else {
+          return $string;
+        }
+      }
+
+      function wrap($string, $length, $newString) {
         $newString = $newString;
         $subString = substr($string, 0, $length);
-        $nextCharsAfterSub = substr($string, $length, $length);
+        //$nextCharAfterSub = substr($string, $length, 1);
         if($newString >= strlen($string)){
+          error_log("In func: ".$newString);
+          if($newString[strlen($newString) - 1] === PHP_EOL) {
+            $newString = substr($newString, 0, strlen($newString) - 1);
+          }
           return $newString;
         } else {
-          //If no spaces in current set, or next set, or if next char in next set is space
+          //If next char in next set is space
           //just concat $substring to $newString with \n
-          if(!preg_match_all('/\s/', $subString) || $nextCharsAfterSub[0] === " "){
-            $newString = $newString.$subString."\n";
+          if($subString[strlen($subString)] === " "){
+            $subString = createString($subString);
+            $newString = $newString.$subString;
             echo $newString."<br>";
-          //If first char in next set is a space, find closest space to left and break there
-          } elseif ($nextCharsAfterSub[0] !== " ") {
+          //If first char in next set is not a space, find closest space to left and break there
+          } else {
               for ($count = 1; $count <= $length; $count++) {
-                if ($subString[$length - $count] === " ") {
-                  $subString = substr($subString, 0, $length - $count);
-                  $newString = $newString.$subString."\n";
-                  error_log($newString);
+                if($count === $length) {
+                  $subString = createString($subString);
+                  $newString = $newString.$subString;
+                  echo $newString."<br>";
+                  break;
+                } elseif ($subString[$length - $count] === " ") {
+                  $subString = createString(substr($subString, 0, $length - $count));
+                  $newString = $newString.$subString;
                   echo $newString."<br>";
                   break;
                 }
               }
           }
-          $updateString = substr($string, strlen($subString));
-          newString($updateString, $length, $newString);
+          if (strlen($subString) < $length) {
+            $updateString = substr($string, strlen($subString));
+          } else {
+            $updateString = substr($string, $length);
+          }
+          wrap($updateString, $length, $newString);
         }
       }
 
-      function wrap ($string, $length){
+      /*function wrap ($string, $length){
         if (strlen($string) <= $length) {
           return $string;
         } else {
           $string = newString($string, $length, "");
+          return $string;
         }
-      }
+      }*/
 
-      $test = wrap("This is a string that I am testing.", 7);
-      error_log($test);
+      $test = wrap("This is a string that I am testing.", 7, "");
+      error_log("Final: ".$test);
+      if ($test === "This is\na\nstring\nthat I\nam\ntesting\n.") {
+        error_log("True");
+      } else {
+        error_log("False");
+      }
     ?>
     </body>
 </html>
