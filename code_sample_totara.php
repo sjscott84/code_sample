@@ -31,8 +31,8 @@
 
       //Take section - remove white space at front and back
       function tidyString($string) {
-        $tidyString = trim($string);
-        if (strlen($tidyString) > 0) {
+        $tidyString = trim($string, " ");
+        if (strlen($tidyString) > 0 && substr($tidyString, -1) !== PHP_EOL) {
           return $tidyString."\n";
         } else {
           return $tidyString;
@@ -42,16 +42,15 @@
 
       //Create the new string and update variables needed to keep track of location
       function createString($string, $newString, $split, $length, $growLength, $addLength) {
-        $nextChar = substr($string, $length, 1);
-        $nextString = tidyString(substr($string, $split, $length));
+        $subString = substr($string, $split, $addLength);
+        $nextString = tidyString($subString);
         $newString = $newString.$nextString;
-        echo $newString."<br>";
+        echo $nextString."<br>";
         $split = $split + $addLength;
-        $newLength = $growLength + $addLength;
-        return array($newString, $split, $newLength);
+        $growLength = $growLength + $addLength;
+        return array($newString, $split, $growLength);
       }
-
-
+      
       function wrap ($string, $length) {
         $newString = "";
         $growLength = $length - 1;
@@ -67,9 +66,12 @@
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length);
           //If character next to one that is to be split is space, split there
-          } elseif ($string[$growLength + 1] === " ") {
+          } elseif ($string[$growLength + 1] === " " || $string[$growLength + 1] === PHP_EOL) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length + 1);
+          } elseif ($string[$growLength] === PHP_EOL) {
+            list($newString, $startSplit, $growLength) = createString($string, $newString,
+              $startSplit, $length, $growLength, $length);
           //If character to be split is a space, split there
           } elseif ($string[$growLength] === " ") {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
@@ -77,12 +79,13 @@
           //Find the nearest space to the left and split there
           } else {
             for ($count = 1; $count <= $length; $count++) {
-              if ($string[$growLength - $count] === " " && $count !== $length) {
+              if ($string[$growLength - $count] === " " || $string[$growLength - $count] === PHP_EOL
+                && $count !== $length) {
                 $tempLength = $length - $count;
                 list($newString, $startSplit, $growLength) = createString($string, $newString,
                   $startSplit, $tempLength, $growLength, $tempLength);
                 break;
-              } elseif ($count === $length ) {
+              } elseif ($count === $length - 1) {
                 list($newString, $startSplit, $growLength) = createString($string, $newString,
                   $startSplit, $length, $growLength, $length);
               }
@@ -101,6 +104,29 @@
       }
 
       //Tests to ensure string is being created correctly
+      /*$test = wrap("test\ntesting", 4);
+      error_log($test);
+      if ($test === "test\ntest\ning") {
+        error_log("True");
+      } else {
+        error_log("False");
+      }*/
+
+      /*$test = wrap("test\ntest", 3);
+      error_log($test);
+      if ($test === "tes\nt\ntes\nt") {
+        error_log("True");
+      } else {
+        error_log("False");
+      }*/
+
+      $test = wrap("test\ntest what a\ntest", 5);
+      error_log($test);
+      if ($test === "test\ntest\nwhat\na\ntest") {
+        error_log("True");
+      } else {
+        error_log("False");
+      }
 
       /*$test = wrap("This is a string that I am testing.", 7);
       error_log($test);
