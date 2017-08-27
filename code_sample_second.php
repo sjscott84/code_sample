@@ -32,21 +32,20 @@
           $subString = $string;
           $nextChar = NULL;
         }
-        if(strlen($string) < $length){
+        if (strlen($string) < $length) {
           list($subString, $newString) = createString($subString, $newString);
           echo $subString;
-          if($newString[strlen($newString) - 1] === PHP_EOL) {
+          if ($newString[strlen($newString) - 1] === PHP_EOL) {
             $newString = substr($newString, 0, strlen($newString) - 1);
           }
           return $newString;
         } else {
           //If last element in substring is a space or new line, break at last element
-          if($subString[strlen($subString) - 1] === " " || $subString[strlen($subString) - 1] === PHP_EOL
-            || $nextChar === " " || $nextChar === PHP_EOL){
+          if ($subString[strlen($subString) - 1] === " " || $subString[strlen($subString) - 1] === PHP_EOL
+            || $nextChar === " " || $nextChar === PHP_EOL) {
             list($subString, $newString) = createString($subString, $newString);
             echo $subString."<br>";
-          //If last element in substring is not a space or new line, 
-          //find closest space or new line to left and break there
+          //If last element in substring is not a space or new line, find closest space or new line to left and break
           } else {
               for ($count = 1; $count <= $length; $count++) {
                 if ($count === $length && $subString[0] !== PHP_EOL) {
@@ -62,7 +61,7 @@
               }
             }
           }
-          if(strlen($subString) > $length) {
+          if (strlen($subString) > $length) {
             $updateString = trim(substr($string, $length), " ");
           } else {
             $updateString = trim(substr($string, strlen($subString)), " ");
