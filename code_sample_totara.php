@@ -45,7 +45,11 @@
         $subString = substr($string, $split, $addLength);
         $nextString = tidyString($subString);
         $newString = $newString.$nextString;
-        echo $nextString."<br>";
+        if (strlen($subString) > 1){
+          echo $nextString."<br>";
+        } else {
+          echo $nextString;
+        }
         $split = $split + $addLength;
         $growLength = $growLength + $addLength;
         return array($newString, $split, $growLength);
@@ -59,10 +63,11 @@
         while (!$complete) {
           //If string less then length simply return string
           if (strlen($string) <= $length) {
+            echo $string;
             return $string;
           //This check ensures there are no PHP Notice:  Uninitialized string offset 
           //warnings by simply adding the last characters in $string to $newString
-          } elseif ($growLength >= strlen($string)) {
+          } elseif ($growLength + 1 >= strlen($string)) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length);
           //If character next to one that is to be split is space, split there
@@ -104,54 +109,29 @@
         return $newString;
       }
 
+
       //Tests to ensure string is being created correctly
-      /*$test = wrap("test\ntesting", 4);
-      error_log($test);
-      if ($test === "test\ntest\ning") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
-
-      /*$test = wrap("test\ntest", 3);
-      error_log($test);
-      if ($test === "tes\nt\ntes\nt") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
-
-      $test = wrap("test\ntest what a\ntest", 5);
-      error_log($test);
-      if ($test === "test\ntest\nwhat\na\ntest") {
+      //$test = wrap("test\ntest", 3);
+      //$test2 = wrap("test\ntesting", 4);
+      //$test3 = wrap("test\ntest what a\ntest", 5);
+      //$test4 = wrap("This is a string that I am testing.", 7);
+      //$test5 = wrap("This is a string that I am testing.", 3);
+      //$test6 = wrap("This is a string that I am testing.", 15);
+      //$test7 = wrap("This is a string that I am testing.", 40);
+      $test8 = wrap("Once upon a time there was a princess", 4);
+      //error_log($test5);
+      //if ($test === "tes\nt\ntes\nt") {
+      //if ($test2 === "test\ntest\ning") {
+      //if ($test3 === "test\ntest\nwhat\na\ntest") {
+      //if ($test4 === "This is\na\nstring\nthat I\nam\ntesting\n.") {
+      //if ($test5 === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
+      //if ($test6 === "This is a\nstring that I\nam testing.") {
+      //if ($test7 === "This is a string that I am testing.") {
+      if ($test8 === "Once\nupon\na\ntime\nther\ne\nwas\na\nprin\ncess") {
         error_log("True");
       } else {
         error_log("False");
       }
-
-      /*$test = wrap("This is a string that I am testing.", 7);
-      error_log($test);
-      if ($test === "This is\na\nstring\nthat I\nam\ntesting\n.") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
-
-      /*$test = wrap("This is a string that I am testing.", 3);
-      error_log($test);
-      if ($test === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
-
-      /*$test = wrap("This is a string that I am testing.", 15);
-      error_log($test);
-      if ($test === "This is a\nstring that I\nam testing.") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
 
     ?>
     </body>

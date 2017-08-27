@@ -4,7 +4,21 @@
     <title>Totara Code Sample - Recursive</title>
   </head>
   <body>
+    <form action="code_sample_totara_recursive.php" method="post">
+      Enter a string:<br>
+      <input type="text" name="string"><br>
+      Enter a number:<br>
+      <input type="text" name="number"><br><br>
+      <input type="submit">
+    </form>
     <?php
+
+
+      //If form is posted, run wrap function
+      if (isset($_POST['string']) && isset($_POST['number'])) {
+        wrap($_POST['string'], intval($_POST['number']));
+      }
+
 
 
       function createString($subString, $newString){
@@ -86,22 +100,22 @@
       //$test = wrap("test\ntest", 3);
       //$test2 = wrap("test\ntesting", 4);
       //$test3 = wrap("test\ntest what a\ntest", 5);
-      $test4 = wrap("This is a string that I am testing.", 7);
+      //$test4 = wrap("This is a string that I am testing.", 7);
       //$test5 = wrap("This is a string that I am testing.", 3);
       //$test6 = wrap("This is a string that I am testing.", 15);
       //$test7 = wrap("This is a string that I am testing.", 40);
-      error_log($test4);
+      //error_log($test4);
       //if ($test === "tes\nt\ntes\nt") {
       //if ($test2 === "test\ntest\ning") {
       //if ($test3 === "test\ntest\nwhat\na\ntest") {
-      if ($test4 === "This is\na\nstring\nthat I\nam\ntesting\n.") {
+      //if ($test4 === "This is\na\nstring\nthat I\nam\ntesting\n.") {
       //if ($test5 === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
       //if ($test6 === "This is a\nstring that I\nam testing.") {
       //if ($test7 === "This is a string that I am testing.") {
-        error_log("True");
+        /*error_log("True");
       } else {
         error_log("False");
-      }
+      }*/
 
     ?>
     </body>
