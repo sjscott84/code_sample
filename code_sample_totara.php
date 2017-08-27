@@ -69,10 +69,11 @@
           } elseif ($string[$growLength + 1] === " " || $string[$growLength + 1] === PHP_EOL) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length + 1);
+          //If last character is new line, then split on last character
           } elseif ($string[$growLength] === PHP_EOL) {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length);
-          //If character to be split is a space, split there
+          //If last character is a space, split on last character
           } elseif ($string[$growLength] === " ") {
             list($newString, $startSplit, $growLength) = createString($string, $newString,
               $startSplit, $length, $growLength, $length - 1);

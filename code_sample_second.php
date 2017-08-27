@@ -7,80 +7,104 @@
     <?php
 
       function createString($string){
-        $string = trim($string);
-        if (strlen($string) > 0) {
+        $string = trim($string, " ");
+        if (strlen($string) > 0 && substr($string, -1) !== PHP_EOL) {
           return $string."\n";
         } else {
           return $string;
         }
       }
 
-      function wrap($string, $length, $newStringArg) {
+      function recursiveWrap($string, $length, $newStringArg) {
         $newString = $newStringArg;
-        $subString = substr($string, 0, $length);
-        $nextCharAfterSub = substr($string, $length, 1);
-        if($newString >= strlen($string)){
+        if (strlen($string) >= $length) {
+          $subString = substr($string, 0, $length);
+          if (strlen($string) > strlen($subString)) {
+            $nextChar = $string[$length];
+          } else {
+            $nextChar = NULL;
+          }
+        } else {
+          $subString = $string;
+          $nextChar = NULL;
+        }
+        if(strlen($string) < $length){
+          $subString = createString($subString);
+          $newString = $newString.$subString;
+          echo $subString;
           if($newString[strlen($newString) - 1] === PHP_EOL) {
             $newString = substr($newString, 0, strlen($newString) - 1);
           }
           return $newString;
         } else {
-          //If next char in from set is space or last char in set is space
-          //just concat $substring to $newString
-          if($subString[strlen($subString)] === " " || $nextCharAfterSub === " "){
+          //If last element in substring is a space or new line, break at last element
+          if($subString[strlen($subString) - 1] === " " || $subString[strlen($subString) - 1] === PHP_EOL
+            || $nextChar === " " || $nextChar === PHP_EOL){
             $subString = createString($subString);
             $newString = $newString.$subString;
             echo $subString."<br>";
-          //If first char in next set is not a space, find closest space to left and break there
+          //If last element in substring is not a space or new line, 
+          //find closest space or new line to left and break there
           } else {
               for ($count = 1; $count <= $length; $count++) {
-                if ($count === $length) {
-                  //if ($subString[0] === " " && $nextCharAfterSub !== " "){
-                    //$subString = $subString.$nextCharAfterSub;
-                  //}
+                if ($count === $length && $subString[0] !== PHP_EOL) {
                   $subString = createString($subString);
                   $newString = $newString.$subString;
                   echo $subString."<br>";
-                } elseif ($subString[$length - $count] === " ") {
+                } elseif ($count === $length && $subString[0] === PHP_EOL) {
+                  $subString = substr($subString, 0, 1);
+                  $newString = $newString;
+                } elseif ($subString[$length - $count] === " " || $subString[$length - $count] === PHP_EOL) {
                   $subString = createString(substr($subString, 0, $length - $count));
                   $newString = $newString.$subString;
                   echo $subString."<br>";
                   break;
-                }
               }
+            }
           }
-          if (strlen($subString) < $length) {
-            $updateString = substr($string, strlen($subString));
-          } else {
+
+          if(strlen($subString) > $length) {
             $updateString = substr($string, $length);
+            $trimUpdate = trim($updateString, " ");
+          } else {
+            $updateString = substr($string, strlen($subString));
+            $trimUpdate = trim($updateString, " ");
           }
-          return wrap($updateString, $length, $newString);
+          return recursiveWrap($trimUpdate, $length, $newString);
         }
       }
 
-      $test = wrap("This is a string that I am testing.", 3, "");
-      error_log($test);
-      if ($test === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
+      function wrap($string, $length) {
+        if (strlen($string) <= $length ) {
+          echo $string;
+          return $string;
+        } else {
+          $newString = recursiveWrap($string, $length, "");
+          return $newString;
+        }
+      }
+
+      //Tests to ensure string is being created correctly
+      //$test = wrap("test\ntest", 3);
+      //$test2 = wrap("test\ntesting", 4);
+      $test3 = wrap("test\ntest what a\ntest", 5);
+      //$test4 = wrap("This is a string that I am testing.", 7);
+      //$test5 = wrap("This is a string that I am testing.", 3);
+      //$test6 = wrap("This is a string that I am testing.", 15);
+      //$test7 = wrap("This is a string that I am testing.", 40);
+      error_log($test7);
+      //if ($test === "tes\nt\ntes\nt") {
+      //if ($test2 === "test\ntest\ning") {
+      if ($test3 === "test\ntest\nwhat\na\ntest") {
+      //if ($test4 === "This is\na\nstring\nthat I\nam\ntesting\n.") {
+      //if ($test5 === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
+      //if ($test6 === "This is a\nstring that I\nam testing.") {
+      //if ($test7 === "This is a string that I am testing.") {
         error_log("True");
       } else {
         error_log("False");
       }
 
-      /*$test = wrap("This is a string that I am testing.", 7, "");
-      error_log($test);
-      if ($test === "This is\na\nstring\nthat I\nam\ntestin\ng.") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
-
-      /*$test = wrap("This is a string that I am testing.", 15, "");
-      error_log($test);
-      if ($test === "This is a\nstring that I am\ntesting.") {
-        error_log("True");
-      } else {
-        error_log("False");
-      }*/
     ?>
     </body>
 </html>
