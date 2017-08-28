@@ -104,6 +104,7 @@
       //$test5 = wrap("This is a string that I am testing.", 3);
       //$test6 = wrap("This is a string that I am testing.", 15);
       //$test7 = wrap("This is a string that I am testing.", 40);
+      //$test8 = wrap("Once upon a time there was a princess", 4);
       //error_log($test4);
       //if ($test === "tes\nt\ntes\nt") {
       //if ($test2 === "test\ntest\ning") {
@@ -112,10 +113,11 @@
       //if ($test5 === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
       //if ($test6 === "This is a\nstring that I\nam testing.") {
       //if ($test7 === "This is a string that I am testing.") {
+      //if ($test8 === "Once\nupon\na\ntime\nther\ne\nwas\na\nprin\ncess") {
         /*error_log("True");
       } else {
         error_log("False");
-      }*/
+      }*.
 
     ?>
     </body>

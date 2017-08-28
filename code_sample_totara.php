@@ -6,9 +6,9 @@
   <body>
     <form action="code_sample_totara.php" method="post">
       Enter a string:<br>
-      <input type="text" name="string"><br>
+      <input type="text" name="string" value=""><br>
       Enter a number:<br>
-      <input type="text" name="number"><br><br>
+      <input type="text" name="number" value=""><br><br>
       <input type="submit">
     </form>
     <?php
@@ -16,6 +16,9 @@
       //If form is posted, run wrap function
       if (isset($_POST['string']) && isset($_POST['number'])) {
         wrap($_POST['string'], intval($_POST['number']));
+      } else {
+        $_POST['string'] = " ";
+        $_POST['number'] = " ";
       }
 
 
@@ -118,7 +121,7 @@
       //$test5 = wrap("This is a string that I am testing.", 3);
       //$test6 = wrap("This is a string that I am testing.", 15);
       //$test7 = wrap("This is a string that I am testing.", 40);
-      $test8 = wrap("Once upon a time there was a princess", 4);
+      //$test8 = wrap("Once upon a time there was a princess", 4);
       //error_log($test5);
       //if ($test === "tes\nt\ntes\nt") {
       //if ($test2 === "test\ntest\ning") {
@@ -127,11 +130,11 @@
       //if ($test5 === "Thi\ns\nis\na\nstr\ning\ntha\nt I\nam\ntes\ntin\ng.") {
       //if ($test6 === "This is a\nstring that I\nam testing.") {
       //if ($test7 === "This is a string that I am testing.") {
-      if ($test8 === "Once\nupon\na\ntime\nther\ne\nwas\na\nprin\ncess") {
-        error_log("True");
+      //if ($test8 === "Once\nupon\na\ntime\nther\ne\nwas\na\nprin\ncess") {
+        /*error_log("True");
       } else {
         error_log("False");
-      }
+      }*/
 
     ?>
     </body>
